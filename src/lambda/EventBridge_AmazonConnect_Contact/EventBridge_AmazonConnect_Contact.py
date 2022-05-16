@@ -24,17 +24,17 @@ def get_primarykey(ddb_table, initial_contactid):
     return primarykey
 
     
-def update_callback(ddb_table, primarykey, contactid, callback_active):
-    log.debug(f"Updating Table, CurrentContactId: {contactid}, PrimaryKey: {primarykey}, CallbackActive: {callback_active}")
+def update_callback(ddb_table, primarykey, contactid, callback_status):
+    log.debug(f"Updating Table, CurrentContactId: {contactid}, PrimaryKey: {primarykey}, CallbackStatus: {callback_status}")
 
     response = ddb_table.update_item(
         Key={
             'phone_number': primarykey
         },
-        UpdateExpression="set contactid_callback=:cicb, callback_active=:cba",
+        UpdateExpression="set contactid_callback=:cicb, callback_status=:cba",
         ExpressionAttributeValues={
             ':cicb': contactid,
-            ':cba': callback_active
+            ':cba': callback_status
         },
     )
 
@@ -57,9 +57,9 @@ def lambda_handler(event, context):
         log.info(f"NEW CALLBACK CREATED")
         initial_contactid = event['detail']['initialContactId']
         primarykey = get_primarykey(ddb_table, initial_contactid)
-        update_callback(ddb_table, primarykey, contactid, "true")
+        update_callback(ddb_table, primarykey, contactid, "active")
     elif eventType == "CONNECTED_TO_AGENT" and initiationMethod == "CALLBACK":
         log.info(f"CALLBACK CONNECTED")
         initial_contactid = event['detail']['initialContactId']
         primarykey = get_primarykey(ddb_table, initial_contactid)
-        update_callback(ddb_table, primarykey, contactid, "false")
+        update_callback(ddb_table, primarykey, contactid, "completed")
