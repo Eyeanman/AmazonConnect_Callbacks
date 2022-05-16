@@ -1,0 +1,12 @@
+{
+    "rule_name": "IH_AmazonConnect_Contact",
+    "eventservice": "Amazon Connect Contact Event",
+    "eventpattern": {
+        "source": ["aws.connect"],
+        "detail-type": ["Amazon Connect Contact Event"],
+        "detail": {
+          "initiationMethod": ["CALLBACK"]
+        }
+      },
+      "targets": "Lambda: EventBridge_AmazonConnect_Contact"
+}

@@ -1,0 +1,10 @@
+{
+    "table_name": "IH_AmazonConnect_Callbacks",
+    "PartitionKey": "phone_number (string)",
+    "GlobalIndex": [
+        {
+            "name": "contactid-index",
+            "PartitionKey": "contactid (string)"
+        }
+    ]
+}
